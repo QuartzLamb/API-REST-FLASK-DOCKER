@@ -6,7 +6,6 @@ class ModelAgent():
     def getAllAgents():
         url = 'https://652add954791d884f1fd723c.mockapi.io/agent'
         response = requests.get(url)
-        print("/////////////////////////////////")
         agents = response.json()
         return agents
 
@@ -19,7 +18,6 @@ class ModelAgent():
                     #Compara el agentName del diccionario con el del objeto obtenido comom parametro
                     if auxAgent['agentID'] == agentID:
                         agentName = auxAgent['agentName']
-                        print("Usuario correcto")
                         loggedAgent = Agent(agentID, agentName, None)
                         return loggedAgent
             return None
@@ -41,13 +39,8 @@ class ModelAgent():
                         agentPassword = auxAgent['password']
                         correctPassword = Agent.check_password(agentPassword, agent.password)
                         if correctPassword:
-                            print("Usuario correcto")
                             loggedAgent = Agent(agentID, agentName, agentPassword)
-                            print(loggedAgent)
                             return loggedAgent
-                else:
-                    print("PROPIEDAD NO EXISTE EN EL DIC")
-            print("/////////////////////////////////")
             return None
         except Exception as ex:
             raise Exception(ex)

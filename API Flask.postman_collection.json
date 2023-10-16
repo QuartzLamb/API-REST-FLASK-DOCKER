@@ -1,0 +1,630 @@
+{
+	"info": {
+		"_postman_id": "6a07ede3-b0d5-49a6-8b7d-b7d3ab61ec44",
+		"name": "API Flask",
+		"description": "API desarrollada en Flask que permite agregar Agents (agentes) e Issues (mensajes de error en un servicio web) y listar estas últimas. Además, posee una ruta restringida por el inicio de sesiíon válido de un Agent.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "7780850"
+	},
+	"item": [
+		{
+			"name": "Issues",
+			"item": [
+				{
+					"name": "Get Issues",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:4000/issues",
+						"description": "Permite acceder a la vista que muestra las Issues. Una vez ejecutada la solicitud, se debe capturar el token csrf contenido en un input oculto si se desea ejecutar una solucitud POST."
+					},
+					"response": [
+						{
+							"name": "Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:4000/issues"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.3.7 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 16 Oct 2023 20:21:36 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "6520"
+								},
+								{
+									"key": "Vary",
+									"value": "Cookie"
+								},
+								{
+									"key": "Set-Cookie",
+									"value": "session=eyJjc3JmX3Rva2VuIjoiNTgxN2QwM2Y3ZTE4M2YzZjlkOGVmZDMzMjZhMTE1NmQxYTc0MzE0NyJ9.ZS2bUA.risDj_wmoKkjUJ4k-esyCqqTyXE; HttpOnly; Path=/"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <title>Listado de Issues</title>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script>\n        <script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>\n    </head>\n    <body>\n        <div class=\"container mt-3\">\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h1>Listado de Issues:</h1>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/\">Menú</a>\n                </div>\n            </div>\n            </br>\n            <div class=\"row\">\n                <div class=\"col mb-3\">\n                    <label for=\"name\">Fecha:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"dateFilter\" placeholder=\"Ingresa la fecha\"\n                    name=\"dateFilter\">\n            \n                </div>\n                <div class=\"col mb-3\">\n                    <label for=\"name\">Agente:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"agentFilter\" placeholder=\"Ingresa el nombre del agente\"\n                    name=\"agentFilter\">\n                    <input type=\"hidden\" name=\"csrf_token\" value=\"IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2bUA.hEImVRNC1r7AlsdSGkNw8zrdMUc\">\n            \n                </div>\n            </div>\n            <div class=\"mt-3\">\n                <button class=\"btn btn-primary\" id=\"filterButton\">Filtrar</button>\n            </div>\n            <div id=\"successAlert\" class=\"alert alert-warning mt-3\" style=\"display: none;\">\n            No se han encontrado Issues con esos valores.\n            \n                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"\n                id=\"closeButton\"></button>\n            </div>\n            <ul id=\"issues\">\n                <script>\n                let successAlert = document.getElementById(\"successAlert\");\n                const issues = [{\"agent\": \"agent 1\", \"dateIssue\": 1697318737, \"descriptionIssue\": \"descriptionIssue 1\", \"issueID\": \"1\", \"titleIssue\": \"titleIssue 1\"}, {\"agent\": \"agent 2\", \"dateIssue\": 1697309950, \"descriptionIssue\": \"descriptionIssue 2\", \"issueID\": \"2\", \"titleIssue\": \"titleIssue 2\"}, {\"agent\": \"agent 3\", \"dateIssue\": 1697309890, \"descriptionIssue\": \"descriptionIssue 3\", \"issueID\": \"3\", \"titleIssue\": \"titleIssue 3\"}, {\"agent\": \"agent 4\", \"dateIssue\": 1697309830, \"descriptionIssue\": \"descriptionIssue 4\", \"issueID\": \"4\", \"titleIssue\": \"titleIssue 4\"}, {\"agent\": \"agent 5\", \"dateIssue\": 1697309770, \"descriptionIssue\": \"descriptionIssue 5\", \"issueID\": \"5\", \"titleIssue\": \"titleIssue 5\"}, {\"agent\": \"agent 6\", \"dateIssue\": 1697309710, \"descriptionIssue\": \"descriptionIssue 6\", \"issueID\": \"6\", \"titleIssue\": \"titleIssue 6\"}, {\"agent\": \"agent 7\", \"dateIssue\": 1697309650, \"descriptionIssue\": \"descriptionIssue 7\", \"issueID\": \"7\", \"titleIssue\": \"titleIssue 7\"}, {\"agent\": \"agent 8\", \"dateIssue\": 1697309590, \"descriptionIssue\": \"descriptionIssue 8\", \"issueID\": \"8\", \"titleIssue\": \"titleIssue 8\"}, {\"agent\": \"jose\", \"dateIssue\": 1697476413, \"descriptionIssue\": \"ultimita\", \"issueID\": \"9\", \"titleIssue\": \"ultima\"}, {\"agent\": \"jose\", \"dateIssue\": 1697476424, \"descriptionIssue\": \"esta no?\", \"issueID\": \"10\", \"titleIssue\": \"esta si\"}];\n                const originalIssues = issues\n                console.log(\"estoy aqui\")\n                let text = \"\";\n                for (let i = 0; i < issues.length; i++) {\n                    const listItem = document.createElement(\"li\");\n                    const date = new Date(issues[i].dateIssue * 1000);\n                    const dateIssue = date.toLocaleString();\n                    text += `\n                    <br>Fecha: ${dateIssue}\n                    <br> Título: ${issues[i].titleIssue} \n                    <br> Description: ${issues[i].descriptionIssue}\n                    <br> Agente: ${issues[i].agent}\n                    <br>\n                    <br>`;\n                    document.getElementById(\"issues\").appendChild(listItem);\n                }\n                document.getElementById(\"issues\").innerHTML = text;\n\n                $(\"#filterButton\").click(function () {\n                    const agent = $(\"#agentFilter\").val();\n                    var date = $(\"#dateFilter\").val();\n                    date = date.replace(\"-\", \"/\");\n                    date = date.replace(\"-\", \"/\");\n                    date = date.replace(\",\", \"\");\n                    const csrfToken = $(\"input[name='csrf_token']\").val();\n                    successAlert.style.display = \"none\";\n\n                    $.ajax({\n                        type: \"POST\",\n                        url: \"/issues\",\n                        data: {\n                            agent: agent,\n                            date: date,\n                            csrf_token: csrfToken\n                        },\n                        success: function (data) {\n                            // Hacer algo con los datos recibidos\n                            console.log(data);\n                            if (data !== null) {\n                                updateIssuesList(data)\n                            }\n                            else {\n                                successAlert.style.display = \"block\";\n\n                                const closeButton = document.getElementById(\"closeButton\");\n                                closeButton.addEventListener(\"click\", () => {\n                                    successAlert.style.display = \"none\";\n                                });\n                            }\n                        },\n                        error: function (error) {\n                            console.error(\"Error al filtrar las issues:\", error);\n                        }\n                    });\n                });\n\n\n                function updateIssuesList(data) {\n                    let text = \"\";\n                    const issuesList = $(\"#issues\");\n\n                    // Limpia la lista actual de problemas\n                    issuesList.empty();\n\n                    for (let i = 0; i < data.length; i++) {\n                        const date = new Date(data[i].dateIssue * 1000);\n                        const dateIssue = date.toLocaleString();\n                        text += `\n                    <li>Fecha: ${dateIssue}\n                        <br> Título: ${data[i].titleIssue}\n                        <br> Description: ${data[i].descriptionIssue}\n                        <br> Agente: ${data[i].agent}\n                        <br>\n                        <br>\n                    </li>`;\n                    }\n\n                    issuesList.html(text);\n                }\n                </script>\n            </ul>\n        </div>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "Filter Issues",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "agent",
+									"value": "agent 6",
+									"type": "text"
+								},
+								{
+									"key": "date",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "csrf_token",
+									"value": "IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2bUA.hEImVRNC1r7AlsdSGkNw8zrdMUc",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:4000/issues",
+						"description": "Permite ejecutar filtrar las Issues por medio de su agent y/o fecha. En el cuerpo del formulario debe ir el agente y fecha (no importa si uno de ellos está vacío) y el token csrf capturado en la solicitud GET a este mismo endpoint."
+					},
+					"response": [
+						{
+							"name": "Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "agent",
+											"value": "agent 6",
+											"type": "text"
+										},
+										{
+											"key": "date",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "csrf_token",
+											"value": "IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2bUA.hEImVRNC1r7AlsdSGkNw8zrdMUc",
+											"type": "text"
+										}
+									]
+								},
+								"url": "http://localhost:4000/issues"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.3.7 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 16 Oct 2023 20:40:59 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "144"
+								},
+								{
+									"key": "Vary",
+									"value": "Cookie"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"agent\": \"agent 6\",\n        \"dateIssue\": 1697309710,\n        \"descriptionIssue\": \"descriptionIssue 6\",\n        \"titleIssue\": \"titleIssue 6\"\n    }\n]"
+						}
+					]
+				}
+			],
+			"description": "Contiene el endpoint para solicitudes relacionadas al listado de Issues"
+		},
+		{
+			"name": "Issue",
+			"item": [
+				{
+					"name": "Get Issue not Logged",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:4000/issue",
+						"description": "Permite acceder a la vista de creación de una Issue. El acceso a esta vista está limitada a usuarios que hayan iniciado su sesión con éxito. De lo contrario, se redirecciona automáticamente a la vista de inicio de sesión."
+					},
+					"response": [
+						{
+							"name": "Response Not Logged",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:4000/issue"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.3.7 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 16 Oct 2023 20:50:47 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1288"
+								},
+								{
+									"key": "Vary",
+									"value": "Cookie"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <title>Iniciar sesion</title>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script>\n    </head>\n    <body>\n        <div class=\"container mt-3\">\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h1>Iniciar sesión</h1>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/\">Menú</a>\n                </div>\n            </div>\n            <form action=\"/login\" method=\"POST\">\n                <input type=\"hidden\" name=\"csrf_token\" value=\"IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2iJw.LKQcIp5cfRAteeF8nkWOekMzXP4\">\n                <div class=\"mb-3 mt-3\">\n                    <label for=\"name\">Nombre:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"agentName\" placeholder=\"Ingresa el nombre\" name=\"agentName\">\n      \n                </div>\n                <div class=\"mb-3\">\n                    <label for=\"pwd\">Contraseña:</label>\n                    <input type=\"password\" class=\"form-control\" id=\"pwd\" placeholder=\"Ingresa la contraseña\" name=\"pwd\">\n      \n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\">Iniciar sesión</button>\n            </form>\n        </div>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "Add Issue",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "dateIssue",
+									"value": "1697492224",
+									"type": "text"
+								},
+								{
+									"key": "AgentName",
+									"value": "agent 6",
+									"type": "text"
+								},
+								{
+									"key": "descriptionIssue",
+									"value": "new issue",
+									"type": "text"
+								},
+								{
+									"key": "csrf_token",
+									"value": "IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2rcQ.Pvica-aX-0uokdnQ39fySDlauZ8",
+									"type": "text"
+								},
+								{
+									"key": "titleIssue",
+									"value": "new issue",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:4000/issue",
+						"description": "Permite agregar una Issue ingresando en el cuerpo del formulario el título, descripción, nombre del agente que la ingresa, fecha (en formato de timestamp) y el token csrf capturado una vez iniciada la sesión."
+					},
+					"response": [
+						{
+							"name": "Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "dateIssue",
+											"value": "1697492224",
+											"type": "text"
+										},
+										{
+											"key": "AgentName",
+											"value": "agent 6",
+											"type": "text"
+										},
+										{
+											"key": "descriptionIssue",
+											"value": "new issue",
+											"type": "text"
+										},
+										{
+											"key": "csrf_token",
+											"value": "IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2rcQ.Pvica-aX-0uokdnQ39fySDlauZ8",
+											"type": "text"
+										},
+										{
+											"key": "titleIssue",
+											"value": "new issue",
+											"type": "text"
+										}
+									]
+								},
+								"url": "http://localhost:4000/issue"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.3.7 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 16 Oct 2023 21:37:21 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2561"
+								},
+								{
+									"key": "Vary",
+									"value": "Cookie"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <title>Agregar Issue</title>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script>\n    </head>\n    <body>\n        <div class=\"container mt-3\">\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h1>Agregar issue</h1>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/\">Menú</a>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h4>Agent: agent 0</h4>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/logout\">Cerrar sesión</a>\n                </div>\n            </div>\n            <form action=\"/issue\" method=\"POST\">\n                <input type=\"hidden\" name=\"csrf_token\" value=\"IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2tEQ.gJGmJWs0wf_rKWHedsvbxwVKAos\">\n                <input class=\"form-control\" type=\"hidden\" id=\"agentName\" name=\"agentName\" value=\"agent 0\">\n                <input type=\"hidden\" class=\"form-control\" id=\"dateIssue\" name=\"dateIssue\">\n                <div class=\"mb-3 mt-3\">\n                    <label for=\"name\">Título:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"titleIssue\" placeholder=\"Ingresa el título\" name=\"titleIssue\">\n      \n                </div>\n                <div class=\"mb-3 mt-3\">\n                    <label for=\"name\">Descripción:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"descriptionIssue\" placeholder=\"Ingresa la descripción\"\n          name=\"descriptionIssue\">\n      \n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\">Agregar</button>\n            </form>\n            <div id=\"successAlert\" class=\"alert alert-success mt-3\" style=\"display: none;\">\n      Operación exitosa: La issue se ha agregada correctamente.\n      \n                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\" id=\"closeButton\"></button>\n            </div>\n        </div>\n        <script>\n    //Obtiene el timestamp actual\n    const timestamp = Date.now();\n    //Pasa el timestamp a segundos y lo asigna como valor al input dateIssue\n    document.getElementById(\"dateIssue\").value = Math.floor(timestamp / 1000);\n\n    let successAlert;\n    const result1 = true;\n    if (result1) {\n      successAlert = document.getElementById(\"successAlert\");\n      successAlert.style.display = \"block\";\n\n      const closeButton = document.getElementById(\"closeButton\");\n      closeButton.addEventListener(\"click\", () => {\n        successAlert.style.display = \"none\";\n      });\n    }\n  </script>\n    </body>\n</html>"
+						}
+					]
+				}
+			],
+			"description": "Contiene el endpoint que involucra la agregación de una Issue"
+		},
+		{
+			"name": "Agent",
+			"item": [
+				{
+					"name": "Get Agent",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": "http://localhost:4000/agent",
+						"description": "Accede a la vista que permite agregar un agente. Una vez ejecutada la solicitud, se debe capturar el token csrf si se desea ejecutar una solucitud POST."
+					},
+					"response": [
+						{
+							"name": "Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": "http://localhost:4000/agent"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.3.7 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 16 Oct 2023 21:03:30 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1956"
+								},
+								{
+									"key": "Vary",
+									"value": "Cookie"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <title>Registrar agente</title>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script>\n    </head>\n    <body>\n        <div class=\"container mt-3\">\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h1>Registrar agente</h1>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/\">Menú</a>\n                </div>\n            </div>\n            <form action=\"/agent\" method=\"POST\">\n                <div class=\"mb-3 mt-3\">\n                    <input type=\"hidden\" name=\"csrf_token\" value=\"IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2lIg.S4w6ZO-DznGPcQPd1g5op0NivuI\">\n                    <label for=\"name\">Nombre:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"agentName\" placeholder=\"Ingresa el nombre\" name=\"agentName\">\n      \n                </div>\n                <div class=\"mb-3\">\n                    <label for=\"pwd\">Contraseña:</label>\n                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Ingresa la contraseña\" name=\"password\">\n      \n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\">Registrar</button>\n            </form>\n            <div id=\"successAlert\" class=\"alert alert-success mt-3\" style=\"display: none;\">\n      Operación exitosa: El agente se ha registrado correctamente.\n      \n                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\" id=\"closeButton\"></button>\n            </div>\n        </div>\n        <script>\n    let successAlert;\n      const result1 = false;\n    if (result1) {\n      successAlert = document.getElementById(\"successAlert\");\n      successAlert.style.display = \"block\";\n\n      const closeButton = document.getElementById(\"closeButton\");\n      closeButton.addEventListener(\"click\", () => {\n        successAlert.style.display = \"none\";\n      });\n    }\n  </script>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "Add Agent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "agentName",
+									"value": "agent 0",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "agent 0",
+									"type": "text"
+								},
+								{
+									"key": "csrf_token",
+									"value": "IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2lIg.S4w6ZO-DznGPcQPd1g5op0NivuI",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:4000/agent",
+						"description": "Permite ejecutar la agregación de Agents ingresando su nombre y contraseña. En el cuerpo del formulario debe ir el nombre, contraseña y el token csrf capturado en la solicitud GET a este mismo endpoint."
+					},
+					"response": [
+						{
+							"name": "Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "agentName",
+											"value": "agent 0",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "agent 0",
+											"type": "text"
+										},
+										{
+											"key": "csrf_token",
+											"value": "IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2lIg.S4w6ZO-DznGPcQPd1g5op0NivuI",
+											"type": "text"
+										}
+									]
+								},
+								"url": "http://localhost:4000/agent"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.3.7 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 16 Oct 2023 21:16:52 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1955"
+								},
+								{
+									"key": "Vary",
+									"value": "Cookie"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <title>Registrar agente</title>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script>\n    </head>\n    <body>\n        <div class=\"container mt-3\">\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h1>Registrar agente</h1>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/\">Menú</a>\n                </div>\n            </div>\n            <form action=\"/agent\" method=\"POST\">\n                <div class=\"mb-3 mt-3\">\n                    <input type=\"hidden\" name=\"csrf_token\" value=\"IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2oRA.0pgpqSF3QqNwAIEYreQJ5HWRAMc\">\n                    <label for=\"name\">Nombre:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"agentName\" placeholder=\"Ingresa el nombre\" name=\"agentName\">\n      \n                </div>\n                <div class=\"mb-3\">\n                    <label for=\"pwd\">Contraseña:</label>\n                    <input type=\"password\" class=\"form-control\" id=\"password\" placeholder=\"Ingresa la contraseña\" name=\"password\">\n      \n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\">Registrar</button>\n            </form>\n            <div id=\"successAlert\" class=\"alert alert-success mt-3\" style=\"display: none;\">\n      Operación exitosa: El agente se ha registrado correctamente.\n      \n                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\" id=\"closeButton\"></button>\n            </div>\n        </div>\n        <script>\n    let successAlert;\n      const result1 = true;\n    if (result1) {\n      successAlert = document.getElementById(\"successAlert\");\n      successAlert.style.display = \"block\";\n\n      const closeButton = document.getElementById(\"closeButton\");\n      closeButton.addEventListener(\"click\", () => {\n        successAlert.style.display = \"none\";\n      });\n    }\n  </script>\n    </body>\n</html>"
+						}
+					]
+				}
+			],
+			"description": "Contiene el endpoint para agregar un nuevo Agent"
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:4000/login",
+						"description": "Permite acceder a la vista que permite iniciar la sesión de un agente. Una vez ejecutada la solicitud, se debe capturar el token csrf si se desea ejecutar una solucitud POST."
+					},
+					"response": [
+						{
+							"name": "Response",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:4000/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.3.7 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 16 Oct 2023 21:25:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1288"
+								},
+								{
+									"key": "Vary",
+									"value": "Cookie"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <title>Iniciar sesion</title>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script>\n    </head>\n    <body>\n        <div class=\"container mt-3\">\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h1>Iniciar sesión</h1>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/\">Menú</a>\n                </div>\n            </div>\n            <form action=\"/login\" method=\"POST\">\n                <input type=\"hidden\" name=\"csrf_token\" value=\"IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2qYw.1vTdIQwyBARf9bc4RnmAG9rlyvE\">\n                <div class=\"mb-3 mt-3\">\n                    <label for=\"name\">Nombre:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"agentName\" placeholder=\"Ingresa el nombre\" name=\"agentName\">\n      \n                </div>\n                <div class=\"mb-3\">\n                    <label for=\"pwd\">Contraseña:</label>\n                    <input type=\"password\" class=\"form-control\" id=\"pwd\" placeholder=\"Ingresa la contraseña\" name=\"pwd\">\n      \n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\">Iniciar sesión</button>\n            </form>\n        </div>\n    </body>\n</html>"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "agentName",
+									"value": "agent 0",
+									"type": "text"
+								},
+								{
+									"key": "pwd",
+									"value": "agent 0",
+									"type": "text"
+								},
+								{
+									"key": "csrf_token",
+									"value": "IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2qYw.1vTdIQwyBARf9bc4RnmAG9rlyvE",
+									"type": "text"
+								}
+							]
+						},
+						"url": "http://localhost:4000/login",
+						"description": "Permite iniciar la sesión de un agent ingresando su nombre y contraseña. En el cuerpo del formulario debe ir el nombre, contraseña y el token csrf capturado en la solicitud GET."
+					},
+					"response": [
+						{
+							"name": "Response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "agentName",
+											"value": "agent 0",
+											"type": "text"
+										},
+										{
+											"key": "pwd",
+											"value": "agent 0",
+											"type": "text"
+										},
+										{
+											"key": "csrf_token",
+											"value": "IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2qYw.1vTdIQwyBARf9bc4RnmAG9rlyvE",
+											"type": "text"
+										}
+									]
+								},
+								"url": "http://localhost:4000/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "html",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/2.3.7 Python/3.12.0"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 16 Oct 2023 21:30:25 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/html; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2562"
+								},
+								{
+									"key": "Vary",
+									"value": "Cookie"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n        <title>Agregar Issue</title>\n        <meta charset=\"utf-8\">\n        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n        <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n        <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js\"></script>\n    </head>\n    <body>\n        <div class=\"container mt-3\">\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h1>Agregar issue</h1>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/\">Menú</a>\n                </div>\n            </div>\n            <div class=\"row\">\n                <div class=\"col\">\n                    <h4>Agent: agent 0</h4>\n                </div>\n                <div class=\"col\">\n                    <a href=\"/logout\">Cerrar sesión</a>\n                </div>\n            </div>\n            <form action=\"/issue\" method=\"POST\">\n                <input type=\"hidden\" name=\"csrf_token\" value=\"IjU4MTdkMDNmN2UxODNmM2Y5ZDhlZmQzMzI2YTExNTZkMWE3NDMxNDci.ZS2rcQ.Pvica-aX-0uokdnQ39fySDlauZ8\">\n                <input class=\"form-control\" type=\"hidden\" id=\"agentName\" name=\"agentName\" value=\"agent 0\">\n                <input type=\"hidden\" class=\"form-control\" id=\"dateIssue\" name=\"dateIssue\">\n                <div class=\"mb-3 mt-3\">\n                    <label for=\"name\">Título:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"titleIssue\" placeholder=\"Ingresa el título\" name=\"titleIssue\">\n      \n                </div>\n                <div class=\"mb-3 mt-3\">\n                    <label for=\"name\">Descripción:</label>\n                    <input type=\"text\" class=\"form-control\" id=\"descriptionIssue\" placeholder=\"Ingresa la descripción\"\n          name=\"descriptionIssue\">\n      \n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\">Agregar</button>\n            </form>\n            <div id=\"successAlert\" class=\"alert alert-success mt-3\" style=\"display: none;\">\n      Operación exitosa: La issue se ha agregada correctamente.\n      \n                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\" id=\"closeButton\"></button>\n            </div>\n        </div>\n        <script>\n    //Obtiene el timestamp actual\n    const timestamp = Date.now();\n    //Pasa el timestamp a segundos y lo asigna como valor al input dateIssue\n    document.getElementById(\"dateIssue\").value = Math.floor(timestamp / 1000);\n\n    let successAlert;\n    const result1 = false;\n    if (result1) {\n      successAlert = document.getElementById(\"successAlert\");\n      successAlert.style.display = \"block\";\n\n      const closeButton = document.getElementById(\"closeButton\");\n      closeButton.addEventListener(\"click\", () => {\n        successAlert.style.display = \"none\";\n      });\n    }\n  </script>\n    </body>\n</html>"
+						}
+					]
+				}
+			],
+			"description": "Contiene el endpoint para iniciar la sesión del Agent"
+		}
+	]
+}

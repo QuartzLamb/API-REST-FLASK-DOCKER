@@ -30,10 +30,8 @@ def login():
         agent = Agent("0", name, password)
         loggedUser = ModelAgent.login(agent)
         if loggedUser != None:
-            print(loggedUser)
             login_user(loggedUser)
-            result = False
-            return render_template("newIssue.html", result=result)
+            return redirect(url_for('addIssue'))
         else:
             return render_template("login.html")
     else:
@@ -43,13 +41,11 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    #return render_template('login.html')
     return redirect(url_for('login'))
 
 @app.route('/agent', methods=['GET', 'POST'])
 def register():
     result = False
-    print(request.method)
     if request.method == 'POST':
         url = 'https://652add954791d884f1fd723c.mockapi.io/agent'
         name = request.form.get('agentName')
@@ -60,29 +56,16 @@ def register():
             "password": hashedPassword
         }
         response = requests.post(url, json=newAgent)
-        print("Se envio")
         result = response.ok  
-        print(response.ok)
-    else:
-        print(request.method)
-        print("No se envio")
-    print("-----------")
     return render_template('register.html', result=result)
 
 
 @app.route('/issues', methods=['GET', 'POST'])
 def getIssues():
     if request.method == 'POST':
-        print("hola")
         agent = request.form.get('agent')
         date = request.form.get('date')
-        print("Agente:")
-        print(agent)
-        print("Fecha:")
-        print(date)
         filteredIssues = ModelIssue.filterIssues(agent, date)
-        print("FINALMENTE:")
-        print(filteredIssues)
         return jsonify(filteredIssues)
     else:
         issues = ModelIssue.getAllIssues()
@@ -93,7 +76,6 @@ def getIssues():
 @login_required
 def addIssue():
     result = False
-    print(request.method)
     url = 'https://652add954791d884f1fd723c.mockapi.io/issue'
     if request.method == 'POST':
         date = request.form.get('dateIssue')
@@ -107,13 +89,9 @@ def addIssue():
             "agent": agent
         }
         response = requests.post(url, json=newIssue)
-        print("Se envio")
         result = response.ok  
-        print(response.ok)
-        print("-----------")
         return render_template('newIssue.html', result=result)
     else:
-        print("EN ISSUE")
         return render_template('newIssue.html', result=result)
 
 #Redirige cuando se intente acceder a una ruta protegida

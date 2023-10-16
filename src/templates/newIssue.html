@@ -12,13 +12,26 @@
 <body>
 
   <div class="container mt-3">
-    <h2>Agregar issue</h2>
-    <a href="{{url_for('logout')}}">Cerrar sesión</a>
-    <label>{{current_user.agentName}}</label>
+    <div class="row">
+      <div class="col">
+        <h1>Agregar issue</h1>
+      </div>
+      <div class="col">
+        <a href="{{url_for('showEndpoints')}}">Menú</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h4>Agent: {{current_user.agentName}}</h4>
+      </div>
+      <div class="col">
+        <a href="{{url_for('logout')}}">Cerrar sesión</a>
+      </div>
+    </div>
     <form action="/issue" method="POST">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input class="form-control" type="hidden" id="agentName" name="agentName" value="{{current_user.agentName}}">
-        <input type="hidden" class="form-control" id="dateIssue" name="dateIssue">
+      <input type="hidden" class="form-control" id="dateIssue" name="dateIssue">
       <div class="mb-3 mt-3">
         <label for="name">Título:</label>
         <input type="text" class="form-control" id="titleIssue" placeholder="Ingresa el título" name="titleIssue">
@@ -40,7 +53,7 @@
     //Obtiene el timestamp actual
     const timestamp = Date.now();
     //Pasa el timestamp a segundos y lo asigna como valor al input dateIssue
-    document.getElementById("dateIssue").value =  Math.floor(timestamp / 1000);
+    document.getElementById("dateIssue").value = Math.floor(timestamp / 1000);
 
     let successAlert;
     const result1 = {{ result| tojson | safe }};

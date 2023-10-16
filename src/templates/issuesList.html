@@ -13,21 +13,41 @@
 <body>
 
     <div class="container mt-3">
-        <h2>Listado de Issues:</h2>
-        <div class="mb-3 mt-3">
-            <label for="name">Fecha:</label>
-            <input type="text" class="form-control" id="dateFilter" placeholder="Ingresa la fecha" name="dateFilter">
-            <label for="name">Agente:</label>
-            <input type="text" class="form-control" id="agentFilter" placeholder="Ingresa el nombre del agente"
-                name="agentFilter">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
-            <button type="button" id="filterButton">Filtrar</button>
+        <div class="row">
+            <div class="col">
+                <h1>Listado de Issues:</h1>
+            </div>
+            <div class="col">
+                <a href="{{url_for('showEndpoints')}}">Menú</a>
+            </div>
+        </div>
+        </br>
+        <div class="row">
+            <div class="col mb-3">
+                <label for="name">Fecha:</label>
+                <input type="text" class="form-control" id="dateFilter" placeholder="Ingresa la fecha"
+                    name="dateFilter">
+            </div>
+            <div class="col mb-3">
+                <label for="name">Agente:</label>
+                <input type="text" class="form-control" id="agentFilter" placeholder="Ingresa el nombre del agente"
+                    name="agentFilter">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+            </div>
+        </div>
+        <div class="mt-3">
+            <button class="btn btn-primary" id="filterButton">Filtrar</button>
+        </div>
+        <div id="successAlert" class="alert alert-warning mt-3" style="display: none;">
+            No se han encontrado Issues con esos valores.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                id="closeButton"></button>
         </div>
         <ul id="issues">
             <script>
+                let successAlert = document.getElementById("successAlert");
                 const issues = {{ datos| tojson | safe }};
                 const originalIssues = issues
-                console.log("estoy aqui")
                 let text = "";
                 for (let i = 0; i < issues.length; i++) {
                     const listItem = document.createElement("li");
@@ -45,6 +65,7 @@
                     date = date.replace("-", "/");
                     date = date.replace(",", "");
                     const csrfToken = $("input[name='csrf_token']").val();
+                    successAlert.style.display = "none";
 
                     $.ajax({
                         type: "POST",
@@ -55,14 +76,17 @@
                             csrf_token: csrfToken
                         },
                         success: function (data) {
-                            // Hacer algo con los datos recibidos
-                            console.log(data);
                             if (data !== null) {
                                 updateIssuesList(data)
                             }
-                        },
-                        error: function (error) {
-                            console.error("Error al filtrar las issues:", error);
+                            else {
+                                successAlert.style.display = "block";
+
+                                const closeButton = document.getElementById("closeButton");
+                                closeButton.addEventListener("click", () => {
+                                    successAlert.style.display = "none";
+                                });
+                            }
                         }
                     });
                 });
@@ -72,7 +96,7 @@
                     let text = "";
                     const issuesList = $("#issues");
 
-                    // Limpia la lista actual de problemas
+                    // Limpia la lista actual de Issues
                     issuesList.empty();
 
                     for (let i = 0; i < data.length; i++) {
@@ -85,6 +109,7 @@
                 }
 
             </script>
+
         </ul>
     </div>
 </body>
