@@ -15,13 +15,19 @@
     <div class="container mt-3">
         <h2>Listado de Issues:</h2>
         <div class="mb-3 mt-3">
-            <label for="name">Nombre:</label>
-            <input type="text" class="form-control" id="filter" placeholder="Ingresa el nombre del agente" name="filter">
-            <button onclick="filterIssues()">Filtrar</button>
+            <label for="name">Fecha:</label>
+            <input type="text" class="form-control" id="dateFilter" placeholder="Ingresa la fecha" name="dateFilter">
+            <label for="name">Agente:</label>
+            <input type="text" class="form-control" id="agentFilter" placeholder="Ingresa el nombre del agente"
+                name="agentFilter">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token()}}">
+            <button type="button" id="filterButton">Filtrar</button>
         </div>
         <ul id="issues">
             <script>
                 const issues = {{ datos| tojson | safe }};
+                const originalIssues = issues
+                console.log("estoy aqui")
                 let text = "";
                 for (let i = 0; i < issues.length; i++) {
                     const listItem = document.createElement("li");
@@ -32,15 +38,50 @@
                 }
                 document.getElementById("issues").innerHTML = text;
 
-                function filterIssues(){
-                    const agent =  document.getElementById('filter').value;
+                $("#filterButton").click(function () {
+                    const agent = $("#agentFilter").val();
+                    var date = $("#dateFilter").val();
+                    date = date.replace("-", "/");
+                    date = date.replace("-", "/");
+                    date = date.replace(",", "");
+                    const csrfToken = $("input[name='csrf_token']").val();
+
                     $.ajax({
                         type: "POST",
                         url: "/issues",
                         data: {
-                            filter: agent
+                            agent: agent,
+                            date: date,
+                            csrf_token: csrfToken
+                        },
+                        success: function (data) {
+                            // Hacer algo con los datos recibidos
+                            console.log(data);
+                            if (data !== null) {
+                                updateIssuesList(data)
+                            }
+                        },
+                        error: function (error) {
+                            console.error("Error al filtrar las issues:", error);
                         }
-                    })
+                    });
+                });
+
+
+                function updateIssuesList(data) {
+                    let text = "";
+                    const issuesList = $("#issues");
+
+                    // Limpia la lista actual de problemas
+                    issuesList.empty();
+
+                    for (let i = 0; i < data.length; i++) {
+                        const date = new Date(data[i].dateIssue * 1000);
+                        const dateIssue = date.toLocaleString();
+                        text += `<li>Fecha: ${dateIssue}<br> Título: ${data[i].titleIssue}<br> Description: ${data[i].descriptionIssue}<br> Agente: ${data[i].agent}<br><br></li>`;
+                    }
+
+                    issuesList.html(text);
                 }
 
             </script>

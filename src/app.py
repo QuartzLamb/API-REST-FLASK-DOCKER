@@ -73,12 +73,17 @@ def register():
 @app.route('/issues', methods=['GET', 'POST'])
 def getIssues():
     if request.method == 'POST':
-        agentName = request.form.get('filter')
-        print(agentName)
-        filteredIssues = ModelIssue.filterIssuesByAgent(agentName)
+        print("hola")
+        agent = request.form.get('agent')
+        date = request.form.get('date')
+        print("Agente:")
+        print(agent)
+        print("Fecha:")
+        print(date)
+        filteredIssues = ModelIssue.filterIssues(agent, date)
         print("FINALMENTE:")
         print(filteredIssues)
-        return render_template('issuesList.html', datos=filteredIssues)
+        return jsonify(filteredIssues)
     else:
         issues = ModelIssue.getAllIssues()
         return render_template('issuesList.html', datos=issues)
@@ -98,7 +103,7 @@ def addIssue():
         newIssue = {
             "titleIssue": title,
             "descriptionIssue": description,
-            "dateIssue": date,
+            "dateIssue": int(date),
             "agent": agent
         }
         response = requests.post(url, json=newIssue)

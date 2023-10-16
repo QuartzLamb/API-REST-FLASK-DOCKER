@@ -37,12 +37,10 @@
   </div>
 
   <script>
-    const date = new Date();
-    dateWithFormat = date.toLocaleString();
-    dateWithFormat = dateWithFormat.replace("-", "/");
-    dateWithFormat = dateWithFormat.replace("-", "/");
-    splittedDate = dateWithFormat.replace(",", " ");
-    document.getElementById("dateIssue").value = splittedDate;
+    //Obtiene el timestamp actual
+    const timestamp = Date.now();
+    //Pasa el timestamp a segundos y lo asigna como valor al input dateIssue
+    document.getElementById("dateIssue").value =  Math.floor(timestamp / 1000);
 
     let successAlert;
     const result1 = {{ result| tojson | safe }};
