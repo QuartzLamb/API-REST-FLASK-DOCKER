@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 import requests
 from models.entities.Agent import Agent
+from models.entities.Issue import Issue
 from models.ModelAgent import ModelAgent
+from models.ModelIssue import ModelIssue
 from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_wtf.csrf import CSRFProtect
 
@@ -68,14 +70,18 @@ def register():
     return render_template('register.html', result=result)
 
 
-@app.route('/issues', methods=['GET'])
+@app.route('/issues', methods=['GET', 'POST'])
 def getIssues():
-    print(request.method)
-    url = 'https://652add954791d884f1fd723c.mockapi.io/issue'
-    response = requests.get(url)
-    print(response.json)
-    print("EN ISSUES")
-    return render_template('issuesList.html', datos=response.json())
+    if request.method == 'POST':
+        agentName = request.form.get('filter')
+        print(agentName)
+        filteredIssues = ModelIssue.filterIssuesByAgent(agentName)
+        print("FINALMENTE:")
+        print(filteredIssues)
+        return render_template('issuesList.html', datos=filteredIssues)
+    else:
+        issues = ModelIssue.getAllIssues()
+        return render_template('issuesList.html', datos=issues)
 
 
 @app.route('/issue', methods=['GET','POST'])
@@ -88,7 +94,7 @@ def addIssue():
         date = request.form.get('dateIssue')
         title = request.form.get('titleIssue')
         description = request.form.get('descriptionIssue')
-        agent = "agente agente!"
+        agent = request.form.get('agentName')
         newIssue = {
             "titleIssue": title,
             "descriptionIssue": description,

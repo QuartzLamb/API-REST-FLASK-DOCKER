@@ -16,13 +16,17 @@
     <a href="{{url_for('logout')}}">Cerrar sesión</a>
     <label>{{current_user.agentName}}</label>
     <form action="/issue" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input class="form-control" type="hidden" id="agentName" name="agentName" value="{{current_user.agentName}}">
+        <input type="hidden" class="form-control" id="dateIssue" name="dateIssue">
       <div class="mb-3 mt-3">
         <label for="name">Título:</label>
         <input type="text" class="form-control" id="titleIssue" placeholder="Ingresa el título" name="titleIssue">
       </div>
       <div class="mb-3 mt-3">
         <label for="name">Descripción:</label>
-        <input type="text" class="form-control" id="descriptionIssue" placeholder="Ingresa la descripción" name="descriptionIssue">
+        <input type="text" class="form-control" id="descriptionIssue" placeholder="Ingresa la descripción"
+          name="descriptionIssue">
       </div>
       <button type="submit" class="btn btn-primary">Agregar</button>
     </form>
@@ -33,8 +37,15 @@
   </div>
 
   <script>
+    const date = new Date();
+    dateWithFormat = date.toLocaleString();
+    dateWithFormat = dateWithFormat.replace("-", "/");
+    dateWithFormat = dateWithFormat.replace("-", "/");
+    splittedDate = dateWithFormat.replace(",", " ");
+    document.getElementById("dateIssue").value = splittedDate;
+
     let successAlert;
-      const result1 = {{ result| tojson | safe }};
+    const result1 = {{ result| tojson | safe }};
     if (result1) {
       successAlert = document.getElementById("successAlert");
       successAlert.style.display = "block";
